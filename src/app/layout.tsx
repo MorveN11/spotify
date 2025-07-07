@@ -5,7 +5,7 @@ import { Toaster } from '@/components/ui/sonner';
 import { env } from '@/config/env/client.env';
 import { cn } from '@/lib/utils';
 
-import './globals.css';
+import '@/app/globals.css';
 
 export const metadata: Metadata = {
   metadataBase: new URL(env.NEXT_PUBLIC_BASE_URL),
