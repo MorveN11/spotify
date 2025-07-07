@@ -1,0 +1,11 @@
+.next/
+.git/
+build/
+node_modules/
+dist/
+public/
+pnpm-lock.yaml
+*.tsbuildinfo
+next-env.d.ts
+.dockerignore
+npm-debug.log
