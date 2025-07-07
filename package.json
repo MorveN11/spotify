@@ -1,6 +1,7 @@
 {
   "name": "spotify",
-  "description": "Spotify clone built with Next.js, Radix UI, and Tailwind CSS",
+  "description": "Spotify clone built with Next.js, Shadcn, Tailwind CSS, and Firebase",
+  "license": "MIT",
   "version": "0.1.0",
   "private": false,
   "scripts": {
