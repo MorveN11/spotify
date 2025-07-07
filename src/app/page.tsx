@@ -1,7 +1,9 @@
+import { Container } from '@/components/ui/container';
+
 export default function Page() {
   return (
-    <div className="custom-container flex min-h-screen items-center justify-center">
-      <h1>Hola Spotify</h1>
-    </div>
+    <Container fullScreen>
+      <h1>Spotify</h1>
+    </Container>
   );
 }
