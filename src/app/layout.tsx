@@ -3,6 +3,7 @@ import { Outfit } from 'next/font/google';
 
 import { Toaster } from '@/components/ui/sonner';
 import { env } from '@/config/env/client.env';
+import { MusicProvider } from '@/contexts/music-context';
 import { cn } from '@/lib/utils';
 
 import '@/app/globals.css';
@@ -29,8 +30,10 @@ export default function RootLayout({
   return (
     <html lang="es">
       <body className={cn(outfit.variable, process.env.NODE_ENV === 'development' && 'debug-screens')}>
-        {children}
-        <Toaster />
+        <MusicProvider>
+          {children}
+          <Toaster />
+        </MusicProvider>
       </body>
     </html>
   );

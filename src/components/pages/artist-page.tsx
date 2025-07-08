@@ -11,19 +11,19 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { useMusic } from '@/contexts/music-context';
 import { mockArtists } from '@/types/artist.type';
 import { mockSongs } from '@/types/song.type';
 
-import { MoreHorizontal, Play, Shuffle } from 'lucide-react';
+import { MoreHorizontal, Pause, Play, Shuffle } from 'lucide-react';
 
 interface Props {
   artistId: string;
-  currentSongId?: string;
-  onPlaySong?: (song: any) => void;
 }
 
-export function ArtistPage({ artistId, currentSongId, onPlaySong }: Props) {
+export function ArtistPage({ artistId }: Props) {
   const router = useRouter();
+  const { playSong, currentSong, isPlaying, togglePlayPause } = useMusic();
   const artist = mockArtists.find((a) => a.id === artistId);
   const songs = mockSongs.filter((s) => s.artistId === artistId);
 
@@ -67,9 +67,19 @@ export function ArtistPage({ artistId, currentSongId, onPlaySong }: Props) {
         <Button
           size="lg"
           className="h-14 w-14 rounded-full bg-primary hover:bg-primary/90"
-          onClick={() => onPlaySong?.(songs[0])}
+          onClick={() => {
+            if (currentSong && songs.some((song) => song.id === currentSong.id)) {
+              togglePlayPause();
+            } else {
+              playSong(songs[0]);
+            }
+          }}
         >
-          <Play className="h-6 w-6" />
+          {currentSong && songs.some((song) => song.id === currentSong.id) && isPlaying ? (
+            <Pause className="h-6 w-6" />
+          ) : (
+            <Play className="h-6 w-6" />
+          )}
         </Button>
 
         <Button variant="ghost" size="icon" className="h-8 w-8 text-gray-400 hover:text-white">
@@ -96,7 +106,7 @@ export function ArtistPage({ artistId, currentSongId, onPlaySong }: Props) {
 
       <div className="px-6">
         <h2 className="mb-4 text-xl font-semibold text-white">Populares</h2>
-        <SongList songs={songs} currentSongId={currentSongId} onPlaySong={onPlaySong} />
+        <SongList songs={songs} />
       </div>
     </div>
   );

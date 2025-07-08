@@ -1,35 +1,26 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import Image from 'next/image';
 
 import { Button } from '@/components/ui/button';
 import { Slider } from '@/components/ui/slider';
-import { Song } from '@/types/song.type';
+import { useMusic } from '@/contexts/music-context';
 
 import { Music, Pause, Play, SkipBack, SkipForward, Volume2, VolumeX } from 'lucide-react';
 
-interface MusicPlayerProps {
-  audioRef: React.RefObject<HTMLAudioElement | null>;
-  currentSong?: Song;
-  isPlaying?: boolean;
-  onPlayPause?: () => void;
-  onNext?: () => void;
-  onPrevious?: () => void;
-}
-
-export function MusicPlayer({
-  audioRef,
-  currentSong,
-  isPlaying = false,
-  onPlayPause,
-  onNext,
-  onPrevious,
-}: MusicPlayerProps) {
-  const [currentTime, setCurrentTime] = useState(0);
+export function MusicPlayer() {
+  const { currentSong, isPlaying, currentTime, audioRef, togglePlayPause, nextSong, previousSong, updateCurrentTime } =
+    useMusic();
   const [volume, setVolume] = useState(0.7);
   const [isMuted, setIsMuted] = useState(false);
+
+  useEffect(() => {
+    if (audioRef.current) {
+      audioRef.current.volume = volume;
+    }
+  }, [audioRef, volume]);
 
   const formatTime = (time: number) => {
     const minutes = Math.floor(time / 60);
@@ -39,10 +30,7 @@ export function MusicPlayer({
 
   const handleTimeChange = (value: number[]) => {
     const newTime = value[0];
-    setCurrentTime(newTime);
-    if (audioRef.current) {
-      audioRef.current.currentTime = newTime;
-    }
+    updateCurrentTime(newTime);
   };
 
   const handleVolumeChange = (value: number[]) => {
@@ -67,12 +55,7 @@ export function MusicPlayer({
 
   return (
     <footer className="flex items-center justify-between border-t border-gray-800 bg-gray-900 px-4 py-3">
-      <audio
-        ref={audioRef}
-        src={currentSong.url}
-        onTimeUpdate={(e) => setCurrentTime(e.currentTarget.currentTime)}
-        onLoadedMetadata={() => setCurrentTime(0)}
-      />
+      <audio ref={audioRef} src={currentSong.url} preload="metadata" />
 
       <div className="flex w-1/4 min-w-0 items-center space-x-3">
         <div className="h-12 w-12 flex-shrink-0 rounded bg-gray-700">
@@ -98,7 +81,7 @@ export function MusicPlayer({
 
       <div className="flex w-1/2 flex-col items-center space-y-2">
         <div className="flex items-center space-x-4">
-          <Button variant="ghost" size="icon" className="h-8 w-8 text-gray-400 hover:text-white" onClick={onPrevious}>
+          <Button variant="ghost" size="icon" className="h-8 w-8 text-gray-400 hover:text-white" onClick={previousSong}>
             <SkipBack className="h-4 w-4" />
           </Button>
 
@@ -106,12 +89,12 @@ export function MusicPlayer({
             variant="ghost"
             size="icon"
             className="h-10 w-10 rounded-full bg-white text-black hover:bg-gray-200"
-            onClick={onPlayPause}
+            onClick={togglePlayPause}
           >
             {isPlaying ? <Pause className="h-5 w-5" /> : <Play className="h-5 w-5" />}
           </Button>
 
-          <Button variant="ghost" size="icon" className="h-8 w-8 text-gray-400 hover:text-white" onClick={onNext}>
+          <Button variant="ghost" size="icon" className="h-8 w-8 text-gray-400 hover:text-white" onClick={nextSong}>
             <SkipForward className="h-4 w-4" />
           </Button>
         </div>

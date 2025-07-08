@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 
 import { useParams } from 'next/navigation';
 
@@ -11,8 +11,6 @@ export default function GenreDetailPage() {
   const params = useParams();
   const genreId = params.id as string;
 
-  const audioRef = useRef<HTMLAudioElement>(null);
-
   const [user] = useState({
     id: 'demo-user',
     name: 'Usuario Demo',
@@ -21,7 +19,7 @@ export default function GenreDetailPage() {
   });
 
   return (
-    <MainLayout audioRef={audioRef} user={user}>
+    <MainLayout user={user}>
       <GenrePage genreId={genreId} />
     </MainLayout>
   );

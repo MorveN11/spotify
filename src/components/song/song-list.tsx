@@ -3,6 +3,7 @@
 import { useState } from 'react';
 
 import { Button } from '@/components/ui/button';
+import { useMusic } from '@/contexts/music-context';
 import { Song } from '@/types/song.type';
 
 import { Pause, Play } from 'lucide-react';
@@ -10,12 +11,13 @@ import { Pause, Play } from 'lucide-react';
 interface SongItemProps {
   song: Song;
   index: number;
-  isPlaying?: boolean;
-  onPlay?: (song: Song) => void;
 }
 
-export function SongItem({ song, index, isPlaying, onPlay }: SongItemProps) {
+export function SongItem({ song, index }: SongItemProps) {
   const [isHovered, setIsHovered] = useState(false);
+  const { currentSong, isPlaying, playSong } = useMusic();
+
+  const isCurrentSong = currentSong?.id === song.id;
 
   const formatDuration = (seconds: number) => {
     const minutes = Math.floor(seconds / 60);
@@ -30,14 +32,14 @@ export function SongItem({ song, index, isPlaying, onPlay }: SongItemProps) {
       onMouseLeave={() => setIsHovered(false)}
     >
       <div className="flex items-center justify-center">
-        {isHovered || isPlaying ? (
+        {isHovered || (isCurrentSong && isPlaying) ? (
           <Button
             variant="ghost"
             size="icon"
             className="h-6 w-6 text-white hover:bg-transparent hover:text-primary"
-            onClick={() => onPlay?.(song)}
+            onClick={() => playSong(song)}
           >
-            {isPlaying ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4" />}
+            {isCurrentSong && isPlaying ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4" />}
           </Button>
         ) : (
           <span className="text-gray-400">{index + 1}</span>
@@ -58,11 +60,9 @@ export function SongItem({ song, index, isPlaying, onPlay }: SongItemProps) {
 
 interface SongListProps {
   songs: Song[];
-  currentSongId?: string;
-  onPlaySong?: (song: Song) => void;
 }
 
-export function SongList({ songs, currentSongId, onPlaySong }: SongListProps) {
+export function SongList({ songs }: SongListProps) {
   return (
     <div className="space-y-1">
       <div className="grid grid-cols-[16px_1fr_1fr_1fr] items-center gap-4 border-b border-gray-800 px-4 py-2 text-sm text-gray-400">
@@ -73,7 +73,7 @@ export function SongList({ songs, currentSongId, onPlaySong }: SongListProps) {
       </div>
 
       {songs.map((song, index) => (
-        <SongItem key={song.id} song={song} index={index} isPlaying={currentSongId === song.id} onPlay={onPlaySong} />
+        <SongItem key={song.id} song={song} index={index} />
       ))}
     </div>
   );
