@@ -21,6 +21,7 @@ export function ArtistCard({ artist }: Props) {
               width={200}
               height={200}
               className="h-full w-full object-cover transition-transform group-hover:scale-105"
+              priority
             />
           </div>
           <div className="flex flex-1 flex-col justify-center space-y-2 text-center">

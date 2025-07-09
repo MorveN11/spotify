@@ -44,13 +44,13 @@ export function ArtistPage({ artistId }: Props) {
         <div className="absolute inset-0 bg-gradient-to-t from-black/50" />
         <div className="flex h-full items-end p-6">
           <div className="flex items-end space-x-6">
-            <div className="h-48 w-48 overflow-hidden rounded-full shadow-2xl">
+            <div className="relative h-48 w-48">
               <Image
                 src={artist.image}
                 alt={artist.name}
-                width={192}
-                height={192}
-                className="h-full w-full object-cover"
+                fill
+                className="rounded-full object-cover shadow-2xl"
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                 priority
               />
             </div>

@@ -1,7 +1,5 @@
 import { useMemo } from 'react';
 
-import { useRouter } from 'next/navigation';
-
 import { useAuth } from '@/contexts/auth.context';
 import { Role } from '@/enums/role.enum';
 import { handleAsyncAction } from '@/lib/action.utils';
@@ -16,8 +14,6 @@ interface Props {
 export const useAuthActions = ({ registerRole = Role.USER }: Props) => {
   const authService = useMemo(() => new AuthService(), []);
 
-  const router = useRouter();
-
   const { refreshUser } = useAuth();
 
   const handleLogin = async (data: LoginFormData): Promise<void> => {
@@ -31,14 +27,7 @@ export const useAuthActions = ({ registerRole = Role.USER }: Props) => {
   };
 
   const handleLogout = async (): Promise<void> => {
-    await handleAsyncAction(
-      () => authService.logout(),
-      'Sesión cerrada exitosamente',
-      true,
-      () => {
-        router.push('/');
-      },
-    );
+    await handleAsyncAction(() => authService.logout(), 'Sesión cerrada exitosamente', true);
   };
 
   const handleRegister = async (data: RegisterFormData): Promise<void> => {

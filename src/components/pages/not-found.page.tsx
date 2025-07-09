@@ -8,7 +8,7 @@ export function NotFoundPage() {
     <div className="fixed inset-0 flex items-center justify-center bg-background">
       <div className="flex flex-col items-center gap-8 text-center">
         <div className="relative">
-          <Image src="/logo.webp" alt="Spotify Logo" width={60} height={60} className="opacity-50" />
+          <Image src="/logo.webp" alt="Spotify Logo" width={60} height={60} className="opacity-50" priority />
         </div>
 
         <div className="space-y-4">
