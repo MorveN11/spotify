@@ -5,19 +5,13 @@ import { useRouter } from 'next/navigation';
 
 import { SongList } from '@/components/song/song.list';
 import { Button } from '@/components/ui/button';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
 import { Error } from '@/components/ui/error';
 import { Loading } from '@/components/ui/loading';
 import { useMusic } from '@/contexts/music.context';
 import { useArtists } from '@/hooks/data/use-artists';
 import { useSongs } from '@/hooks/data/use-songs';
 
-import { MoreHorizontal, Pause, Play, Shuffle } from 'lucide-react';
+import { Pause, Play } from 'lucide-react';
 
 interface Props {
   artistId: string;
@@ -117,27 +111,6 @@ export function ArtistPage({ artistId }: Props) {
             <Play className="h-6 w-6" />
           )}
         </Button>
-
-        <Button variant="ghost" size="icon" className="h-8 w-8 text-gray-400 hover:text-white">
-          <Shuffle className="h-6 w-6" />
-        </Button>
-
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" size="icon" className="h-8 w-8 text-gray-400 hover:text-white">
-              <MoreHorizontal className="h-6 w-6" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="start" className="border-gray-700 bg-gray-800">
-            <DropdownMenuItem className="text-gray-300 focus:bg-gray-700 focus:text-white">
-              Seguir artista
-            </DropdownMenuItem>
-            <DropdownMenuItem className="text-gray-300 focus:bg-gray-700 focus:text-white">
-              Ir a radio del artista
-            </DropdownMenuItem>
-            <DropdownMenuItem className="text-gray-300 focus:bg-gray-700 focus:text-white">Compartir</DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
       </div>
 
       <div className="px-6">

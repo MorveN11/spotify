@@ -4,7 +4,7 @@ import type { Genre } from '@/types/genre.type';
 
 import { collection, deleteDoc, doc, getDocs, setDoc, updateDoc } from 'firebase/firestore';
 
-class GenreRepository {
+export class GenreRepository {
   private readonly collectionName = 'genres';
 
   public async createGenre(genre: Genre): Promise<ApiResponse<Genre>> {

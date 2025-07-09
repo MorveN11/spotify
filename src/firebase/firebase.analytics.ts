@@ -1,6 +1,6 @@
-import { logEvent } from 'firebase/analytics';
+import { analytics } from '@/firebase/firebase.app';
 
-import { analytics } from './firebase.app';
+import { logEvent } from 'firebase/analytics';
 
 export const logCustomEvent = (eventName: string, parameters?: Record<string, any>) => {
   if (analytics) {

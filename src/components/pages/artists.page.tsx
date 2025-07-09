@@ -4,6 +4,7 @@ import { useState } from 'react';
 
 import Image from 'next/image';
 
+import { CreateArtistForm } from '@/components/artist/create-artist.form';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
@@ -15,11 +16,9 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import { Error } from '@/components/ui/error';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import { Loading } from '@/components/ui/loading';
-import { Textarea } from '@/components/ui/textarea';
 import { useArtists } from '@/hooks/data/use-artists';
+import { formService } from '@/services/form.service';
 
 import { Plus, Trash2 } from 'lucide-react';
 
@@ -36,10 +35,20 @@ export function ArtistsPage() {
     return <Error title="Error al cargar artistas" message={error} showRetry={true} onRetry={refetch} icon="circle" />;
   }
 
-  const handleDelete = (_id: string) => {};
+  const handleDelete = (id: string) => {
+    formService
+      .deleteArtist(id)
+      .then(() => {
+        refetch();
+      })
+      .catch((err) => {
+        console.error('Error deleting artist:', err);
+      });
+  };
 
   const handleCreate = () => {
     setIsDialogOpen(false);
+    refetch();
   };
 
   return (
@@ -61,55 +70,7 @@ export function ArtistsPage() {
               <DialogTitle className="text-white">Crear Nuevo Artista</DialogTitle>
               <DialogDescription className="text-gray-400">Completa los datos del artista</DialogDescription>
             </DialogHeader>
-            <div className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="name" className="text-white">
-                  Nombre
-                </Label>
-                <Input id="name" placeholder="Nombre del artista" className="border-gray-700 bg-gray-900 text-white" />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="bio" className="text-white">
-                  Biografía
-                </Label>
-                <Textarea
-                  id="bio"
-                  placeholder="Biografía del artista"
-                  className="border-gray-700 bg-gray-900 text-white"
-                  rows={4}
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="image" className="text-white">
-                  Imagen URL
-                </Label>
-                <Input
-                  id="image"
-                  placeholder="/images/artists/artist.webp"
-                  className="border-gray-700 bg-gray-900 text-white"
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="genre" className="text-white">
-                  Género
-                </Label>
-                <Input id="genre" placeholder="Género musical" className="border-gray-700 bg-gray-900 text-white" />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="genreId" className="text-white">
-                  ID del Género
-                </Label>
-                <Input id="genreId" placeholder="ID del género" className="border-gray-700 bg-gray-900 text-white" />
-              </div>
-              <div className="flex space-x-2">
-                <Button onClick={handleCreate} className="bg-green-500 hover:bg-green-600">
-                  Guardar
-                </Button>
-                <Button onClick={() => setIsDialogOpen(false)} variant="outline" className="border-gray-700">
-                  Cancelar
-                </Button>
-              </div>
-            </div>
+            <CreateArtistForm onSuccess={handleCreate} onCancel={() => setIsDialogOpen(false)} />
           </DialogContent>
         </Dialog>
       </div>

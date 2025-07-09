@@ -16,7 +16,7 @@ import {
   updateProfile,
 } from 'firebase/auth';
 
-class AuthService {
+export class AuthService {
   public async login(data: LoginFormData): Promise<ApiResponse<User>> {
     try {
       const userCredential = await signInWithEmailAndPassword(auth, data.email, data.password);

@@ -4,6 +4,7 @@ import { useState } from 'react';
 
 import Image from 'next/image';
 
+import { CreateSongForm } from '@/components/song/create-song.form';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import {
@@ -15,12 +16,11 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import { Error } from '@/components/ui/error';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import { Loading } from '@/components/ui/loading';
 import { useSongs } from '@/hooks/data/use-songs';
+import { formService } from '@/services/form.service';
 
-import { Play, Plus, Trash2 } from 'lucide-react';
+import { Plus, Trash2 } from 'lucide-react';
 
 export function SongsPage() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -35,10 +35,20 @@ export function SongsPage() {
     return <Error title="Error al cargar canciones" message={error} showRetry={true} onRetry={refetch} icon="circle" />;
   }
 
-  const handleDelete = (_id: string) => {};
+  const handleDelete = (_id: string) => {
+    formService
+      .deleteSong(_id)
+      .then(() => {
+        refetch();
+      })
+      .catch((err) => {
+        console.error('Error deleting song:', err);
+      });
+  };
 
   const handleCreate = () => {
     setIsDialogOpen(false);
+    refetch();
   };
 
   const formatDuration = (seconds: number) => {
@@ -66,85 +76,7 @@ export function SongsPage() {
               <DialogTitle className="text-white">Crear Nueva Canción</DialogTitle>
               <DialogDescription className="text-gray-400">Completa los datos de la canción</DialogDescription>
             </DialogHeader>
-            <div className="space-y-4">
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="title" className="text-white">
-                    Título
-                  </Label>
-                  <Input
-                    id="title"
-                    placeholder="Título de la canción"
-                    className="border-gray-700 bg-gray-900 text-white"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="album" className="text-white">
-                    Álbum
-                  </Label>
-                  <Input id="album" placeholder="Nombre del álbum" className="border-gray-700 bg-gray-900 text-white" />
-                </div>
-              </div>
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="artist" className="text-white">
-                    Artista
-                  </Label>
-                  <Input
-                    id="artist"
-                    placeholder="Nombre del artista"
-                    className="border-gray-700 bg-gray-900 text-white"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="artistId" className="text-white">
-                    ID del Artista
-                  </Label>
-                  <Input
-                    id="artistId"
-                    placeholder="ID del artista"
-                    className="border-gray-700 bg-gray-900 text-white"
-                  />
-                </div>
-              </div>
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="duration" className="text-white">
-                    Duración (segundos)
-                  </Label>
-                  <Input
-                    id="duration"
-                    type="number"
-                    placeholder="202"
-                    className="border-gray-700 bg-gray-900 text-white"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="image" className="text-white">
-                    Imagen URL
-                  </Label>
-                  <Input
-                    id="image"
-                    placeholder="/images/albums/album.webp"
-                    className="border-gray-700 bg-gray-900 text-white"
-                  />
-                </div>
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="url" className="text-white">
-                  Audio URL
-                </Label>
-                <Input id="url" placeholder="/audio/song.opus" className="border-gray-700 bg-gray-900 text-white" />
-              </div>
-              <div className="flex space-x-2">
-                <Button onClick={handleCreate} className="bg-green-500 hover:bg-green-600">
-                  Guardar
-                </Button>
-                <Button onClick={() => setIsDialogOpen(false)} variant="outline" className="border-gray-700">
-                  Cancelar
-                </Button>
-              </div>
-            </div>
+            <CreateSongForm onSuccess={handleCreate} onCancel={() => setIsDialogOpen(false)} />
           </DialogContent>
         </Dialog>
       </div>
@@ -165,9 +97,6 @@ export function SongsPage() {
                 </div>
                 <div className="text-sm text-gray-400">{formatDuration(song.duration)}</div>
                 <div className="flex space-x-2">
-                  <Button size="sm" variant="outline" className="border-gray-700 hover:bg-gray-700">
-                    <Play className="h-4 w-4" />
-                  </Button>
                   <Button
                     onClick={() => handleDelete(song.id)}
                     size="sm"

@@ -4,6 +4,7 @@ import { useState } from 'react';
 
 import Image from 'next/image';
 
+import { CreateGenreForm } from '@/components/genre/create-genre.form';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
@@ -15,10 +16,9 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import { Error } from '@/components/ui/error';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import { Loading } from '@/components/ui/loading';
 import { useGenres } from '@/hooks/data/use-genres';
+import { formService } from '@/services/form.service';
 
 import { Plus, Trash2 } from 'lucide-react';
 
@@ -35,10 +35,20 @@ export function GenresPage() {
     return <Error title="Error al cargar géneros" message={error} showRetry={true} onRetry={refetch} icon="circle" />;
   }
 
-  const handleDelete = (_id: string) => {};
+  const handleDelete = (id: string) => {
+    formService
+      .deleteGenre(id)
+      .then(() => {
+        refetch();
+      })
+      .catch((err) => {
+        console.error('Error deleting genre:', err);
+      });
+  };
 
   const handleCreate = () => {
     setIsDialogOpen(false);
+    refetch();
   };
 
   return (
@@ -55,42 +65,13 @@ export function GenresPage() {
               Nuevo Género
             </Button>
           </DialogTrigger>
-          <DialogContent className="border-gray-700 bg-gray-800">
+          <DialogContent className="max-h-[90vh] w-full max-w-2xl overflow-y-auto border-gray-700 bg-gray-800">
             <DialogHeader>
               <DialogTitle className="text-white">Crear Nuevo Género</DialogTitle>
               <DialogDescription className="text-gray-400">Completa los datos del género musical</DialogDescription>
             </DialogHeader>
-            <div className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="name" className="text-white">
-                  Nombre
-                </Label>
-                <Input id="name" placeholder="Nombre del género" className="border-gray-700 bg-gray-900 text-white" />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="image" className="text-white">
-                  Imagen URL
-                </Label>
-                <Input
-                  id="image"
-                  placeholder="/images/genres/genre.webp"
-                  className="border-gray-700 bg-gray-900 text-white"
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="color" className="text-white">
-                  Color
-                </Label>
-                <Input id="color" type="color" className="h-10 border-gray-700 bg-gray-900 text-white" />
-              </div>
-              <div className="flex space-x-2">
-                <Button onClick={handleCreate} className="bg-green-500 hover:bg-green-600">
-                  Guardar
-                </Button>
-                <Button onClick={() => setIsDialogOpen(false)} variant="outline" className="border-gray-700">
-                  Cancelar
-                </Button>
-              </div>
+            <div className="max-h-[70vh] overflow-y-auto">
+              <CreateGenreForm onSuccess={handleCreate} onCancel={() => setIsDialogOpen(false)} />
             </div>
           </DialogContent>
         </Dialog>

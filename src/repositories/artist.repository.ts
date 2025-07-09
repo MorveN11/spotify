@@ -4,7 +4,7 @@ import type { Artist } from '@/types/artist.type';
 
 import { collection, deleteDoc, doc, getDocs, setDoc, updateDoc } from 'firebase/firestore';
 
-class ArtistRepository {
+export class ArtistRepository {
   private readonly collectionName = 'artists';
 
   public async createArtist(artist: Artist): Promise<ApiResponse<Artist>> {

@@ -7,7 +7,7 @@ import type { FileType, FileUploadResult, FileValidationConfig } from '@/types/s
 
 import { deleteObject, getDownloadURL, ref, uploadBytes, type UploadResult } from 'firebase/storage';
 
-class StorageService {
+export class StorageService {
   private readonly fileConfigs: Record<FileType, FileValidationConfig> = {
     image: {
       maxSize: 5 * 1024 * 1024, // 5MB

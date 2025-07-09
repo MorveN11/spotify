@@ -4,7 +4,7 @@ import type { Song } from '@/types/song.type';
 
 import { collection, deleteDoc, doc, getDocs, setDoc, updateDoc } from 'firebase/firestore';
 
-class SongRepository {
+export class SongRepository {
   private readonly collectionName = 'songs';
 
   public async createSong(song: Song): Promise<ApiResponse<Song>> {

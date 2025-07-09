@@ -8,9 +8,6 @@ interface UseGenresReturn {
   isLoading: boolean;
   error: string | null;
   refetch: () => Promise<void>;
-  createGenre: (genre: Genre) => Promise<boolean>;
-  updateGenre: (id: string, genre: Partial<Genre>) => Promise<boolean>;
-  deleteGenre: (id: string) => Promise<boolean>;
 }
 
 export const useGenres = (autofetch: boolean = true): UseGenresReturn => {
@@ -37,57 +34,6 @@ export const useGenres = (autofetch: boolean = true): UseGenresReturn => {
     }
   }, []);
 
-  const createGenre = useCallback(async (genre: Genre): Promise<boolean> => {
-    try {
-      const result = await genreRepository.createGenre(genre);
-
-      if (result.success) {
-        setGenres((prev) => [...prev, genre]);
-        return true;
-      } else {
-        setError(result.error);
-        return false;
-      }
-    } catch (_err) {
-      setError('Error inesperado al crear el género');
-      return false;
-    }
-  }, []);
-
-  const updateGenre = useCallback(async (id: string, genreData: Partial<Genre>): Promise<boolean> => {
-    try {
-      const result = await genreRepository.updateGenre(id, genreData);
-
-      if (result.success) {
-        setGenres((prev) => prev.map((genre) => (genre.id === id ? { ...genre, ...genreData } : genre)));
-        return true;
-      } else {
-        setError(result.error);
-        return false;
-      }
-    } catch (_err) {
-      setError('Error inesperado al actualizar el género');
-      return false;
-    }
-  }, []);
-
-  const deleteGenre = useCallback(async (id: string): Promise<boolean> => {
-    try {
-      const result = await genreRepository.deleteGenre(id);
-
-      if (result.success) {
-        setGenres((prev) => prev.filter((genre) => genre.id !== id));
-        return true;
-      } else {
-        setError(result.error);
-        return false;
-      }
-    } catch (_err) {
-      setError('Error inesperado al eliminar el género');
-      return false;
-    }
-  }, []);
-
   useEffect(() => {
     if (autofetch) {
       fetchGenres();
@@ -99,8 +45,5 @@ export const useGenres = (autofetch: boolean = true): UseGenresReturn => {
     isLoading,
     error,
     refetch: fetchGenres,
-    createGenre,
-    updateGenre,
-    deleteGenre,
   };
 };

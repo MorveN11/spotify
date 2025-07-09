@@ -17,7 +17,7 @@ export function MainLayout({ children, user }: Props) {
     <div className="flex h-screen bg-black text-white">
       <MainSidebar isAdmin={user.isAdmin} />
 
-      <div className="flex flex-1 flex-col">
+      <div className="flex w-full flex-1 flex-col">
         <MainHeader user={user} />
 
         <main className="flex-1 overflow-y-auto bg-gradient-to-b from-gray-900 via-gray-900 to-black">{children}</main>
