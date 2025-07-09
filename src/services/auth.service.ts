@@ -81,7 +81,7 @@ export class AuthService {
     }
   }
 
-  public async loginWithProvider(providerId: AuthProviderType): Promise<ApiResponse<User>> {
+  public async loginWithProvider(providerId: AuthProviderType, role: Role): Promise<ApiResponse<User>> {
     try {
       if (providerId === 'password') {
         throw new CustomAuthError(AuthErrorCode.PROVIDER_NOT_SUPPORTED);
@@ -93,12 +93,26 @@ export class AuthService {
 
       const { user } = userCredential;
 
-      const idTokenResult = await user.getIdTokenResult();
+      if (!user) {
+        throw new CustomAuthError(AuthErrorCode.LOGIN_FAILED);
+      }
+
+      await setUserRole(user.uid, role);
+
+      await user.reload();
+
+      const currentUser = auth.currentUser;
+
+      if (!currentUser) {
+        throw new CustomAuthError(AuthErrorCode.USER_NOT_FOUND);
+      }
+
+      const idTokenResult = await currentUser.getIdTokenResult();
 
       const loggedUser = userSchema.safeParse({
-        uid: user.uid,
-        email: user.email || '',
-        displayName: user.displayName || '',
+        uid: currentUser.uid,
+        email: currentUser.email || '',
+        displayName: currentUser.displayName || '',
         isAdmin: idTokenResult.claims.role === Role.ADMIN,
       });
 

@@ -24,6 +24,7 @@ export const AuthErrorCode = {
   PROFILE_UPDATE_FAILED: 'auth/profile-update-failed',
   VALIDATION_ERROR: 'auth/validation-error',
   UNKNOWN_ERROR: 'auth/unknown-error',
+  LOGIN_FAILED: 'auth/login-failed',
 } as const;
 
 export type AuthErrorCode = (typeof AuthErrorCode)[keyof typeof AuthErrorCode];
@@ -60,6 +61,7 @@ const errorMessages: Record<AuthErrorCode, string> = {
   [AuthErrorCode.PROFILE_UPDATE_FAILED]: 'Error al actualizar la información del perfil. Intenta de nuevo.',
   [AuthErrorCode.VALIDATION_ERROR]: 'Datos inválidos proporcionados. Verifica tu información e intenta de nuevo.',
   [AuthErrorCode.UNKNOWN_ERROR]: 'Ocurrió un error inesperado. Intenta de nuevo.',
+  [AuthErrorCode.LOGIN_FAILED]: 'Error al iniciar sesión. Verifica tus credenciales e intenta de nuevo.',
 };
 
 export interface CustomAuthErrorInterface extends Error {

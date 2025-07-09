@@ -8,14 +8,14 @@ import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { cn } from '@/lib/utils';
 
-import { Home, Music, Settings, Users } from 'lucide-react';
+import { Disc3, Home, Music, Users } from 'lucide-react';
 
 const navigation = [{ name: 'Inicio', href: '/', icon: Home }];
 
 const admin = [
-  { name: 'Géneros', href: '/admin/genres', icon: Music },
+  { name: 'Géneros', href: '/admin/genres', icon: Disc3 },
   { name: 'Artistas', href: '/admin/artists', icon: Users },
-  { name: 'Configuración', href: '/admin/settings', icon: Settings },
+  { name: 'Canciones', href: '/admin/songs', icon: Music },
 ];
 
 interface Props {

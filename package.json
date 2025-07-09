@@ -9,7 +9,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint --max-warnings 0",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "setup:admin": "tsx --env-file=.env scripts/setup-admin.ts"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.1.1",
@@ -63,6 +64,7 @@
     "prettier-plugin-tailwindcss": "^0.6.13",
     "tailwindcss": "^4",
     "tailwindcss-debug-screens": "^3.0.1",
+    "tsx": "^4.20.3",
     "tw-animate-css": "^1.3.5",
     "typescript": "^5"
   },
@@ -73,7 +75,8 @@
       "sharp",
       "unrs-resolver",
       "@firebase/util",
-      "protobufjs"
+      "protobufjs",
+      "esbuild"
     ]
   }
 }

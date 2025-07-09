@@ -9,9 +9,10 @@ import { AuthService } from '@/services/auth.service';
 
 interface Props {
   registerRole?: Role;
+  loginWithProviderRole?: Role;
 }
 
-export const useAuthActions = ({ registerRole = Role.USER }: Props) => {
+export const useAuthActions = ({ registerRole = Role.USER, loginWithProviderRole = Role.USER }: Props) => {
   const authService = useMemo(() => new AuthService(), []);
 
   const { refreshUser } = useAuth();
@@ -23,7 +24,11 @@ export const useAuthActions = ({ registerRole = Role.USER }: Props) => {
   const handleLoginWithProvider = async (providerId: AuthProviderType): Promise<void> => {
     if (providerId === 'password') return;
 
-    await handleAsyncAction(() => authService.loginWithProvider(providerId), 'Inicio de sesión exitoso', true);
+    await handleAsyncAction(
+      () => authService.loginWithProvider(providerId, loginWithProviderRole),
+      'Inicio de sesión exitoso',
+      true,
+    );
   };
 
   const handleLogout = async (): Promise<void> => {

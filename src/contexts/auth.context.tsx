@@ -35,11 +35,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     if (currentUser) {
       const idTokenResult = await currentUser.getIdTokenResult();
 
+      const role = idTokenResult.claims.role as Role | undefined;
+      const isAdmin = role ? role === Role.ADMIN : false;
+      const displayName = currentUser.displayName || (isAdmin ? 'Administrador' : 'Usuario');
+
       setUser({
         uid: currentUser.uid,
         email: currentUser.email || '',
-        displayName: currentUser.displayName || '',
-        isAdmin: idTokenResult.claims.role === Role.ADMIN,
+        displayName,
+        isAdmin,
       });
     } else {
       setUser({} as User);
