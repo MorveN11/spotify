@@ -14,22 +14,30 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
+import { Error } from '@/components/ui/error';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Genre, mockGenres } from '@/types/genre.type';
+import { Loading } from '@/components/ui/loading';
+import { useGenres } from '@/hooks/data/use-genres';
 
 import { Plus, Trash2 } from 'lucide-react';
 
 export function GenresPage() {
-  const [genres, setGenres] = useState<Genre[]>(mockGenres);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
-  const handleDelete = (id: string) => {
-    setGenres(genres.filter((genre) => genre.id !== id));
-  };
+  const { genres, isLoading, error, refetch } = useGenres();
+
+  if (isLoading) {
+    return <Loading message="Cargando géneros musicales..." />;
+  }
+
+  if (error) {
+    return <Error title="Error al cargar géneros" message={error} showRetry={true} onRetry={refetch} icon="circle" />;
+  }
+
+  const handleDelete = (_id: string) => {};
 
   const handleCreate = () => {
-    // TODO: Implement create logic
     setIsDialogOpen(false);
   };
 

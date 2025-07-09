@@ -1,7 +1,19 @@
 import { GenreGrid } from '@/components/genre/genre.grid';
-import { mockGenres } from '@/types/genre.type';
+import { Error } from '@/components/ui/error';
+import { Loading } from '@/components/ui/loading';
+import { useGenres } from '@/hooks/data/use-genres';
 
 export function HomePage() {
+  const { genres, isLoading, error, refetch } = useGenres();
+
+  if (isLoading) {
+    return <Loading message="Cargando géneros musicales..." />;
+  }
+
+  if (error) {
+    return <Error title="Error al cargar géneros" message={error} showRetry={true} onRetry={refetch} icon="circle" />;
+  }
+
   const currentHour = new Date().getHours();
   let greeting = 'Buenos días';
 
@@ -20,7 +32,7 @@ export function HomePage() {
 
       <section>
         <h2 className="mb-6 text-2xl font-semibold text-white">Explorar géneros</h2>
-        <GenreGrid genres={mockGenres} />
+        <GenreGrid genres={genres} />
       </section>
     </div>
   );

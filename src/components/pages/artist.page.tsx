@@ -11,9 +11,11 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { Error } from '@/components/ui/error';
+import { Loading } from '@/components/ui/loading';
 import { useMusic } from '@/contexts/music.context';
-import { mockArtists } from '@/types/artist.type';
-import { mockSongs } from '@/types/song.type';
+import { useArtists } from '@/hooks/data/use-artists';
+import { useSongs } from '@/hooks/data/use-songs';
 
 import { MoreHorizontal, Pause, Play, Shuffle } from 'lucide-react';
 
@@ -23,9 +25,43 @@ interface Props {
 
 export function ArtistPage({ artistId }: Props) {
   const router = useRouter();
+
   const { playSong, currentSong, isPlaying, togglePlayPause } = useMusic();
-  const artist = mockArtists.find((a) => a.id === artistId);
-  const songs = mockSongs.filter((s) => s.artistId === artistId);
+
+  const { artists, isLoading: isLoadingArtists, error: errorArtists, refetch: refetchArtists } = useArtists();
+
+  const { songs, isLoading: isLoadingSongs, error: errorSongs, refetch: refetchSongs } = useSongs();
+
+  if (isLoadingArtists || isLoadingSongs) {
+    return <Loading message="Cargando artistas y canciones..." />;
+  }
+
+  if (errorArtists) {
+    return (
+      <Error
+        title="Error al cargar artistas"
+        message={errorArtists}
+        showRetry={true}
+        onRetry={refetchArtists}
+        icon="circle"
+      />
+    );
+  }
+
+  if (errorSongs) {
+    return (
+      <Error
+        title="Error al cargar canciones"
+        message={errorSongs}
+        showRetry={true}
+        onRetry={refetchSongs}
+        icon="circle"
+      />
+    );
+  }
+
+  const artist = artists.find((a) => a.id === artistId);
+  const artistSongs = songs.filter((s) => s.artistId === artistId);
 
   if (!artist) {
     return (
@@ -68,14 +104,14 @@ export function ArtistPage({ artistId }: Props) {
           size="lg"
           className="h-14 w-14 rounded-full bg-primary hover:bg-primary/90"
           onClick={() => {
-            if (currentSong && songs.some((song) => song.id === currentSong.id)) {
+            if (currentSong && artistSongs.some((song) => song.id === currentSong.id)) {
               togglePlayPause();
             } else {
-              playSong(songs[0]);
+              playSong(artistSongs[0]);
             }
           }}
         >
-          {currentSong && songs.some((song) => song.id === currentSong.id) && isPlaying ? (
+          {currentSong && artistSongs.some((song) => song.id === currentSong.id) && isPlaying ? (
             <Pause className="h-6 w-6" />
           ) : (
             <Play className="h-6 w-6" />
@@ -106,7 +142,7 @@ export function ArtistPage({ artistId }: Props) {
 
       <div className="px-6">
         <h2 className="mb-4 text-xl font-semibold text-white">Populares</h2>
-        <SongList songs={songs} />
+        <SongList songs={artistSongs} />
       </div>
     </div>
   );

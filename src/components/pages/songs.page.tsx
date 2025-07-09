@@ -14,22 +14,30 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
+import { Error } from '@/components/ui/error';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Song, mockSongs } from '@/types/song.type';
+import { Loading } from '@/components/ui/loading';
+import { useSongs } from '@/hooks/data/use-songs';
 
 import { Play, Plus, Trash2 } from 'lucide-react';
 
 export function SongsPage() {
-  const [songs, setSongs] = useState<Song[]>(mockSongs);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
-  const handleDelete = (id: string) => {
-    setSongs(songs.filter((song) => song.id !== id));
-  };
+  const { songs, isLoading, error, refetch } = useSongs();
+
+  if (isLoading) {
+    return <Loading message="Cargando canciones..." />;
+  }
+
+  if (error) {
+    return <Error title="Error al cargar canciones" message={error} showRetry={true} onRetry={refetch} icon="circle" />;
+  }
+
+  const handleDelete = (_id: string) => {};
 
   const handleCreate = () => {
-    // TODO: Implement create logic
     setIsDialogOpen(false);
   };
 

@@ -14,23 +14,31 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
+import { Error } from '@/components/ui/error';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Loading } from '@/components/ui/loading';
 import { Textarea } from '@/components/ui/textarea';
-import { Artist, mockArtists } from '@/types/artist.type';
+import { useArtists } from '@/hooks/data/use-artists';
 
 import { Plus, Trash2 } from 'lucide-react';
 
 export function ArtistsPage() {
-  const [artists, setArtists] = useState<Artist[]>(mockArtists);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
-  const handleDelete = (id: string) => {
-    setArtists(artists.filter((artist) => artist.id !== id));
-  };
+  const { artists, isLoading, error, refetch } = useArtists();
+
+  if (isLoading) {
+    return <Loading message="Cargando artistas musicales..." />;
+  }
+
+  if (error) {
+    return <Error title="Error al cargar artistas" message={error} showRetry={true} onRetry={refetch} icon="circle" />;
+  }
+
+  const handleDelete = (_id: string) => {};
 
   const handleCreate = () => {
-    // TODO: Implement create logic
     setIsDialogOpen(false);
   };
 
