@@ -63,7 +63,6 @@ export function AdminPanel() {
           </TabsTrigger>
         </TabsList>
 
-        {/* Overview Tab */}
         <TabsContent value="overview">
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
             <Card className="border-gray-700 bg-gray-800/50">
@@ -152,7 +151,6 @@ export function AdminPanel() {
           </Card>
         </TabsContent>
 
-        {/* Artists Tab */}
         <TabsContent value="artists">
           <Card className="border-gray-700 bg-gray-800/50">
             <CardHeader>
@@ -200,7 +198,6 @@ export function AdminPanel() {
           </Card>
         </TabsContent>
 
-        {/* Songs Tab */}
         <TabsContent value="songs">
           <Card className="border-gray-700 bg-gray-800/50">
             <CardHeader>

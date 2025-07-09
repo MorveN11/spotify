@@ -1,9 +1,8 @@
 import type { Metadata } from 'next';
 import { Outfit } from 'next/font/google';
 
-import { Toaster } from '@/components/ui/sonner';
+import { Providers } from '@/app/providers';
 import { env } from '@/config/env/client.env';
-import { MusicProvider } from '@/contexts/music-context';
 import { cn } from '@/lib/utils';
 
 import '@/app/globals.css';
@@ -30,10 +29,7 @@ export default function RootLayout({
   return (
     <html lang="es">
       <body className={cn(outfit.variable, process.env.NODE_ENV === 'development' && 'debug-screens')}>
-        <MusicProvider>
-          {children}
-          <Toaster />
-        </MusicProvider>
+        <Providers>{children}</Providers>
       </body>
     </html>
   );

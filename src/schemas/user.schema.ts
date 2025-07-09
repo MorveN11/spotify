@@ -1,10 +1,10 @@
 import z from 'zod';
 
-export const UserSchema = z.object({
-  id: z.string({
+export const userSchema = z.object({
+  uid: z.string({
     message: 'El ID del usuario es requerido',
   }),
-  name: z
+  displayName: z
     .string({
       message: 'El nombre del usuario es requerido',
     })

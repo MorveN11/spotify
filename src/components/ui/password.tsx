@@ -13,6 +13,7 @@ export function Password({ className, ...props }: ComponentProps<'input'>) {
   return (
     <div className="relative">
       <Input
+        placeholder="••••••••"
         type={showPassword ? 'text' : 'password'}
         className={cn('hide-password-toggle pr-10', className)}
         {...props}

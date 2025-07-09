@@ -1,12 +1,12 @@
 'use client';
 
-import { AuthForm } from '@/components/auth/auth.form';
+import { redirect } from 'next/navigation';
+
 import { MainLayout } from '@/components/layout/main.layout';
-import { HomePage } from '@/components/pages/home.page';
 import { LoadingPage } from '@/components/pages/loading.page';
 import { useAuth } from '@/contexts/auth.context';
 
-export default function Page() {
+export default function Layout({ children }: { children: React.ReactNode }) {
   const { user, isLoading, isAuthenticated } = useAuth();
 
   if (isLoading) {
@@ -14,12 +14,8 @@ export default function Page() {
   }
 
   if (!isAuthenticated) {
-    return <AuthForm />;
+    redirect('/');
   }
 
-  return (
-    <MainLayout user={user}>
-      <HomePage />
-    </MainLayout>
-  );
+  return <MainLayout user={user}>{children}</MainLayout>;
 }
