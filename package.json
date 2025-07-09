@@ -10,7 +10,8 @@
     "start": "next start",
     "lint": "next lint --max-warnings 0",
     "format": "prettier --write .",
-    "setup:admin": "tsx --env-file=.env scripts/setup-admin.ts"
+    "setup:admin": "tsx --env-file=.env scripts/setup-admin.ts",
+    "seed": "tsx --env-file=.env scripts/seed.ts"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.1.1",

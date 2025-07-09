@@ -1,3 +1,4 @@
+#!/usr/bin/env tsx
 import { Role } from '@/enums/role.enum';
 import { firebaseAdmin } from '@/firebase/firebase.admin';
 

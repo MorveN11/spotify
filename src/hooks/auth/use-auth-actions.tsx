@@ -1,11 +1,9 @@
-import { useMemo } from 'react';
-
 import { useAuth } from '@/contexts/auth.context';
 import { Role } from '@/enums/role.enum';
 import { handleAsyncAction } from '@/lib/action.utils';
 import { AuthProviderType } from '@/providers/auth.providers';
 import { LoginFormData, RegisterFormData } from '@/schemas/auth.schema';
-import { AuthService } from '@/services/auth.service';
+import { authService } from '@/services/auth.service';
 
 interface Props {
   registerRole?: Role;
@@ -13,8 +11,6 @@ interface Props {
 }
 
 export const useAuthActions = ({ registerRole = Role.USER, loginWithProviderRole = Role.USER }: Props) => {
-  const authService = useMemo(() => new AuthService(), []);
-
   const { refreshUser } = useAuth();
 
   const handleLogin = async (data: LoginFormData): Promise<void> => {
